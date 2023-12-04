@@ -15,7 +15,7 @@ void setup() {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(2000);
   }
-
+  
   // Calibration process
   Serial.println("Calibrating...");
   calibrateGyro();
@@ -31,12 +31,12 @@ void calibrateGyro() {
     Vector normAccel = mpu.readNormalizeAccel();
 
     // Calculate pitch and yaw angles in radians
-    float pitch = atan2(normAccel.XAxis, sqrt(normAccel.YAxis * normAccel.YAxis + normAccel.ZAxis * normAccel.ZAxis));
-    float yaw = atan2(normAccel.YAxis, sqrt(normAccel.XAxis * normAccel.XAxis + normAccel.ZAxis * normAccel.ZAxis));
+    float pitch = atan(normAccel.XAxis/sqrt(normAccel.YAxis * normAccel.YAxis + normAccel.ZAxis * normAccel.ZAxis));
+    float yaw = atan(normAccel.YAxis/sqrt(normAccel.XAxis * normAccel.XAxis + normAccel.ZAxis * normAccel.ZAxis));
 
     // Convert radians to degrees
-    pitch = pitch * 180.0 / M_PI;
-    yaw = yaw * 180.0 / M_PI;
+    pitch = pitch * (1/(3.142/180));
+    yaw = yaw * (1/(3.142/180));
 
     pitchTotal += pitch;
     yawTotal += yaw;
@@ -54,12 +54,12 @@ void loop() {
     Vector normAccel = mpu.readNormalizeAccel();
 
     // Calculate pitch and yaw angles in radians
-    float pitch = atan2(normAccel.XAxis, sqrt(normAccel.YAxis * normAccel.YAxis + normAccel.ZAxis * normAccel.ZAxis));
-    float yaw = atan2(normAccel.YAxis, sqrt(normAccel.XAxis * normAccel.XAxis + normAccel.ZAxis * normAccel.ZAxis));
+    float pitch = atan(normAccel.XAxis/sqrt(normAccel.YAxis * normAccel.YAxis + normAccel.ZAxis * normAccel.ZAxis));
+    float yaw = atan(normAccel.YAxis/sqrt(normAccel.XAxis * normAccel.XAxis + normAccel.ZAxis * normAccel.ZAxis));
 
     // Convert radians to degrees and subtract offsets, then cast to integer
-    pitch = (pitch * 180.0 / M_PI) - pitchOffset;
-    yaw = (yaw * 180.0 / M_PI) - yawOffset;
+    pitch = (pitch * (1/(3.142/180))) - pitchOffset;
+    yaw = (yaw * (1/(3.142/180))) - yawOffset;
 
     int intPitch = static_cast<int>(pitch);
     int intYaw = static_cast<int>(yaw);
