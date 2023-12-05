@@ -1,0 +1,53 @@
+#include <Stepper.h>
+#include <Wire.h>
+
+const int stepsPerRevolution = 2048;
+
+#define motorPin1  2
+#define motorPin2  3
+#define motorPin3  4
+#define motorPin4  5
+
+#define motorPin5  A0
+#define motorPin6  A1
+#define motorPin7  A2
+#define motorPin8  A3
+
+const int stahp = 6, stahp2 = 7;
+
+Stepper rollStepper(stepsPerRevolution, motorPin1, motorPin2, motorPin3, motorPin4);
+Stepper yawStepper(stepsPerRevolution, motorPin5, motorPin6, motorPin7, motorPin8);
+
+boolean stopped = true;
+boolean stopped2 = true;
+
+void setup() {
+  Serial.begin(9600);
+  rollStepper.setSpeed(6);
+  yawStepper.setSpeed(6);
+  pinMode(stahp, INPUT);
+  pinMode(stahp2, INPUT);
+}
+
+void loop() {
+  motor_roll();
+  motor_yaw();
+}
+
+void motor_roll() {
+  if (digitalRead(stahp) == LOW) {
+    rollStepper.step(stepsPerRevolution);
+    stopped = false;
+  } else {
+    stopped = true;
+  }
+}
+
+void motor_yaw() {
+  if (digitalRead(stahp2) == LOW) {
+    yawStepper.step(stepsPerRevolution);
+    stopped2 = false;
+  } else {
+    stopped2 = true;
+  }
+}

@@ -182,7 +182,7 @@ void pitch_check(){
         digitalWrite(stahp,LOW);
     }
     if(floor(pitch*100)<floor(val*100)){
-        digitalWrite(cw,HIGH);
+        digitalWrite(cw,HIGH); 
         }else{
         digitalWrite(cw,LOW);
     }
