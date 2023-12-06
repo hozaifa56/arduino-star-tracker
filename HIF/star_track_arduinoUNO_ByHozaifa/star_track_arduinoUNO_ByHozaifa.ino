@@ -14,7 +14,7 @@ float yawRaw = 0;
 int roll;
 int yaw;
 //pin definition
-const int stahp=6,stahp2=7;
+const int stop=6,stop2=7;
 
 int val = 0;//variable to store the user input DEC
 int val2 = 0;//variable to store the user input RA
@@ -23,8 +23,8 @@ void setup() {
 
   Serial.begin(9600);
   Wire.begin();
-    pinMode(stahp,OUTPUT);
-    pinMode(stahp2,OUTPUT);
+    pinMode(stop,OUTPUT);
+    pinMode(stop2,OUTPUT);
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
@@ -91,24 +91,24 @@ void recvdata(){
 void altitude_check(){
     Serial.println("i am in altitude_check function");
     if(val2==roll){
-      digitalWrite(stahp2,HIGH);
-      Serial.println(digitalRead(stahp2));
+      digitalWrite(stop2,LOW);
+      Serial.println(digitalRead(stop2));
     }
     else{
-      digitalWrite(stahp2,LOW);
-      Serial.println(digitalRead(stahp2));
+      digitalWrite(stop2,HIGH);
+      Serial.println(digitalRead(stop2));
     }
 
 }
 void azimuth_check(){
     Serial.println("i am in azimuth_check function");
     if(val==yaw){
-      digitalWrite(stahp,HIGH);
-      Serial.println(digitalRead(stahp));
+      digitalWrite(stop,LOW);
+      Serial.println(digitalRead(stop));
     }
     else{
-      digitalWrite(stahp,LOW);
-      Serial.println(digitalRead(stahp));
+      digitalWrite(stop,HIGH);
+      Serial.println(digitalRead(stop));
     }
     
 }

@@ -13,7 +13,7 @@ const int stepsPerRevolution = 2048;
 #define motorPin7  A2
 #define motorPin8  A3
 
-const int stahp = 6, stahp2 = 7;
+const int stop = 6, stop2 = 7;
 
 Stepper rollStepper(stepsPerRevolution, motorPin1, motorPin2, motorPin3, motorPin4);
 Stepper yawStepper(stepsPerRevolution, motorPin5, motorPin6, motorPin7, motorPin8);
@@ -25,8 +25,8 @@ void setup() {
   Serial.begin(9600);
   rollStepper.setSpeed(6);
   yawStepper.setSpeed(6);
-  pinMode(stahp, INPUT);
-  pinMode(stahp2, INPUT);
+  pinMode(stop, INPUT);
+  pinMode(stop2, INPUT);
 }
 
 void loop() {
@@ -35,19 +35,19 @@ void loop() {
 }
 
 void motor_roll() {
-  if (digitalRead(stahp) == LOW) {
-    rollStepper.step(stepsPerRevolution);
-    stopped = false;
-  } else {
+  if (digitalRead(stop) == LOW) {
     stopped = true;
+  } else {
+    rollStepper.step(stepsPerRevolution);
+    stopped=false;
   }
 }
 
 void motor_yaw() {
-  if (digitalRead(stahp2) == LOW) {
-    yawStepper.step(stepsPerRevolution);
-    stopped2 = false;
-  } else {
+  if (digitalRead(stop2) == LOW) {
     stopped2 = true;
+  } else {
+    yawStepper.step(stepsPerRevolution);    
+    stopped2 = false;
   }
 }
