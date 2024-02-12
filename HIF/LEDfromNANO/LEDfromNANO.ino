@@ -1,5 +1,5 @@
-const int ledPin = 13; // Change this to the pin connected to your LED
-const int stopPin = 6; // Change this to the pin connected to your stop variable
+const int ledPin = 12; // Change this to the pin connected to your LED
+
 
 void setup() {
   pinMode(stopPin, INPUT);
