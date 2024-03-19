@@ -2,7 +2,7 @@
 const int vec=20;
 int x;
 // Define the number of steps per revolution and the pins connected to the stepper motor
-const int stepsPerRevolution = 1000;
+const int stepsPerRevolution = 200;
 Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor is connected to pins 8, 9, 10, and 11
 
 void setup() {
