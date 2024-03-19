@@ -10,21 +10,18 @@
 #define OLED_RESET -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+// Define the number of steps per revolution and the pins connected to the stepper motor
+const int stepsPerRevolution = 1000;
+Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor is connected to pins 8, 9, 10, and 11
+
 MPU6050 mpu;
 
-// Define the number of steps per revolution and the pins connected to the stepper motor
-const int stepsPerRevolution = 200;
-int yawraw;
-int pitchraw;
-const int vectorYaw; //enter the value of how many steps needed to move 1degree.... store it like =XX;
-const int vectorPitch=20; //same stuff here 
-int yawF;
-int pitchF;
-Stepper PitchStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor is connected to pins 8, 9, 10, and 11
-Stepper yawStepper(stepsPerRevolution, 4, 5, 6, 7);
 void setup() {
   Serial.begin(9600);  // Initialize serial communication
-    Wire.begin();
+  // Set the speed of the stepper motor
+  myStepper.setSpeed(10);  // Set speed to 10 steps per second
+
+  Wire.begin();
 
   // Initialize display
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
@@ -44,54 +41,24 @@ void setup() {
 
   // Calibrate gyro
   mpu.calibrateGyro();
-  // Set the speed of the stepper motor
-  myStepper1.setSpeed(10);  // Set speed to 10 steps per second
-  myStepper2.setSpeed(10);
 }
 
 void loop() {
-    gyrodisplay();
-    readSerialInput();
-    yawF=vectoryaw*yawraw;
-    pitchF=vectorPitch*pitchraw;
+  gyro_display();
+  // Check if there's data available to read from the serial port
+  if (Serial.available() > 0) {
+    // Read the number of steps from the serial input
+    int desiredSteps = Serial.parseInt();
 
     // Move the stepper motor to the desired number of steps
-    yawStepper.step(yawF);
-    pitchStepper.step(pitchF);
+    myStepper.step(desiredSteps);
+
     // Optional: You might want to add a delay or perform other actions after the motor has moved
     delay(1000);  // Adjust delay as needed
-
-}
-void readSerialInput() {
-  Serial.println("Hi, welcome to the Arduino Based star and planet tracker. Please enter the coordinates in form x,y in the serial input.")
-  // Check if data is available to read from serial port
-  if (Serial.available() > 0) {
-    // Read the incoming data until newline character is received
-    String data = Serial.readStringUntil('\n');
-    
-    // Find the position of the comma
-    int commaPosition = data.indexOf(',');
-    
-    // Check if comma exists in the received data
-    if (commaPosition != -1) {
-      // Extract x and y values from the received data
-      String x_str = data.substring(0, commaPosition);
-      String y_str = data.substring(commaPosition + 1);
-      
-      // Convert the string values to integers
-      yawraw = x_str.toInt();
-      pitchraw = y_str.toInt();
-      
-      // Print the received values for testing
-      Serial.print(" Given Yaw: ");
-      Serial.println(yawraw);
-      Serial.print(" Given Pitch: ");
-      Serial.println(pitchraw);
-    }
   }
 }
-void gyrodisplay(){
-  // Read accelerometer and gyroscope data
+void gyro_display(){
+    // Read accelerometer and gyroscope data
   Vector rawAccel = mpu.readRawAccel();
   Vector rawGyro = mpu.readNormalizeGyro();
 
@@ -126,5 +93,5 @@ void gyrodisplay(){
   Serial.print(pitch);
   Serial.println(" degrees");
 
-  delay(100);
+  delay(100); // Adjust delay as needed
 }
