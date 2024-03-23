@@ -1,5 +1,5 @@
 #include <Stepper.h>
-const int vec=20;
+const int vec=26;
 int x;
 // Define the number of steps per revolution and the pins connected to the stepper motor
 const int stepsPerRevolution = 200;

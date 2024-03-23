@@ -16,6 +16,9 @@ Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor 
 
 MPU6050 mpu;
 
+float initialPitch = 0.0;
+float initialYaw = 0.0;
+
 void setup() {
   Serial.begin(9600);  // Initialize serial communication
   // Set the speed of the stepper motor
@@ -41,6 +44,10 @@ void setup() {
 
   // Calibrate gyro
   mpu.calibrateGyro();
+
+  // Read initial gyro values
+  initialPitch = getPitch();
+  initialYaw = getYaw();
 }
 
 void loop() {
@@ -57,16 +64,11 @@ void loop() {
     delay(1000);  // Adjust delay as needed
   }
 }
+
 void gyro_display(){
-    // Read accelerometer and gyroscope data
-  Vector rawAccel = mpu.readRawAccel();
-  Vector rawGyro = mpu.readNormalizeGyro();
-
-  // Calculate pitch
-  float pitch = atan2(-rawAccel.YAxis, sqrt(rawAccel.XAxis * rawAccel.XAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
-
-  // Calculate yaw
-  float yaw = atan2(rawAccel.XAxis, sqrt(rawAccel.YAxis * rawAccel.YAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
+  // Read accelerometer and gyroscope data
+  float pitch = getPitch() - initialPitch;
+  float yaw = getYaw() - initialYaw;
 
   // Clear previous values on the display
   display.clearDisplay();
@@ -94,4 +96,14 @@ void gyro_display(){
   Serial.println(" degrees");
 
   delay(100); // Adjust delay as needed
+}
+
+float getPitch() {
+  Vector rawAccel = mpu.readRawAccel();
+  return atan2(-rawAccel.YAxis, sqrt(rawAccel.XAxis * rawAccel.XAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
+}
+
+float getYaw() {
+  Vector rawAccel = mpu.readRawAccel();
+  return atan2(rawAccel.XAxis, sqrt(rawAccel.YAxis * rawAccel.YAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
 }

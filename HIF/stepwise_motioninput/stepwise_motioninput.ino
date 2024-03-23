@@ -2,13 +2,14 @@
 
 // Define the number of steps per revolution and the pins connected to the stepper motor
 const int stepsPerRevolution = 200;
-Stepper myStepper1(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor is connected to pins 8, 9, 10, and 11
-Stepper myStepper2(stepsPerRevolution, 4, 5, 6, 11);
+Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor is connected to pins 8, 9, 10, and 11
+
 void setup() {
   Serial.begin(9600);  // Initialize serial communication
   // Set the speed of the stepper motor
   myStepper.setSpeed(10);  // Set speed to 10 steps per second
 }
+
 
 void loop() {
   // Check if there's data available to read from the serial port
