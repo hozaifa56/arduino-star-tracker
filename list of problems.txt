@@ -1,0 +1,15 @@
+List of problems:
+1- motors not getting power
+2- MPU library
+3- user input coordinate
+4- recvdata fuction problem
+5- length of wires
+6- accelstepper.h vs stepper.h
+7- I2C communication
+
+9 Nov-
+Motors are getting power
+problem was with accelstepper library.
+16 Nov-
+functions are being called.
+user input is being taken and converted BUT motors are not moving after taking input
