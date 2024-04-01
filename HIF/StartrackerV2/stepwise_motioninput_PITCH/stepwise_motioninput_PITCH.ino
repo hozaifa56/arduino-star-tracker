@@ -6,12 +6,14 @@
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-
+int y;
+const int t=240000;
+const int vecy=26;
 #define OLED_RESET -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // Define the number of steps per revolution and the pins connected to the stepper motor
-const int stepsPerRevolution = 1000;
+const int stepsPerRevolution = 200;
 Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor is connected to pins 8, 9, 10, and 11
 
 MPU6050 mpu;
@@ -56,13 +58,15 @@ void loop() {
   if (Serial.available() > 0) {
     // Read the number of steps from the serial input
     int desiredSteps = Serial.parseInt();
+    y=desiredSteps*vecy;
 
     // Move the stepper motor to the desired number of steps
-    myStepper.step(desiredSteps);
+    myStepper.step(y);
 
     // Optional: You might want to add a delay or perform other actions after the motor has moved
     delay(1000);  // Adjust delay as needed
   }
+  track();
 }
 
 void gyro_display(){
@@ -105,5 +109,9 @@ float getPitch() {
 
 float getYaw() {
   Vector rawAccel = mpu.readRawAccel();
-  return atan2(rawAccel.XAxis, sqrt(rawAccel.YAxis * rawAccel.YAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
+  return atan2(rawAccel.XAxis, sqrt(rawAccel.YAxis * rawAccel.YAxis + rawAccel.ZAxis * rawAccel.ZA
+}
+void track(){
+  delay(t);
+  myStepper.step(vecy);
 }

@@ -1,5 +1,6 @@
 #include <Stepper.h>
-const int vec=26;
+const int vec=20;
+const int t=240000;
 int x;
 // Define the number of steps per revolution and the pins connected to the stepper motor
 const int stepsPerRevolution = 200;
@@ -22,7 +23,12 @@ void loop() {
     // Move the stepper motor to the desired number of steps
     myStepper.step(x);
 
+  track();
     // Optional: You might want to add a delay or perform other actions after the motor has moved
     delay(1000);  // Adjust delay as needed
   }
+}
+void track(){
+  delay(t);
+  myStepper.step(vec);
 }
