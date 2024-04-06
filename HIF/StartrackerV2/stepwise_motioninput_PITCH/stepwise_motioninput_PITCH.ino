@@ -18,8 +18,8 @@ Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);  // Assuming stepper motor 
 
 MPU6050 mpu;
 
-float initialPitch = 0.0;
-float initialYaw = 0.0;
+int initialPitch = 0;
+int initialYaw = 0;
 
 void setup() {
   Serial.begin(9600);  // Initialize serial communication
@@ -65,14 +65,17 @@ void loop() {
 
     // Optional: You might want to add a delay or perform other actions after the motor has moved
     delay(1000);  // Adjust delay as needed
+    while(true){
+      gyro_display();
+      track();
+    }
   }
-  track();
 }
 
 void gyro_display(){
   // Read accelerometer and gyroscope data
-  float pitch = getPitch() - initialPitch;
-  float yaw = getYaw() - initialYaw;
+  int pitch = getPitch() - initialPitch;
+  int yaw = getYaw() - initialYaw;
 
   // Clear previous values on the display
   display.clearDisplay();
@@ -102,14 +105,14 @@ void gyro_display(){
   delay(100); // Adjust delay as needed
 }
 
-float getPitch() {
+int getPitch() {
   Vector rawAccel = mpu.readRawAccel();
   return atan2(-rawAccel.YAxis, sqrt(rawAccel.XAxis * rawAccel.XAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
 }
 
-float getYaw() {
+int getYaw() {
   Vector rawAccel = mpu.readRawAccel();
-  return atan2(rawAccel.XAxis, sqrt(rawAccel.YAxis * rawAccel.YAxis + rawAccel.ZAxis * rawAccel.ZA
+  return atan2(rawAccel.XAxis, sqrt(rawAccel.YAxis * rawAccel.YAxis + rawAccel.ZAxis * rawAccel.ZAxis)) * 180 / PI;
 }
 void track(){
   delay(t);
